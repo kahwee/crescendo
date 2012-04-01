@@ -68,6 +68,6 @@ app/resources/tmp/*
 #Yii Framework
 assets/*
 protected/runtime/*
-protected/config/main.local.php
+protected/config/main-local.php
 error.log
 /.htaccess
