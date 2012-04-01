@@ -40,12 +40,7 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 	private $_fileName = '';
 	private $_uploadPath = '';
 
-	/**
-	 * Responds to {@link CModel::onAfterConstruct} event.
-	 * Overrides this method if you want to handle the corresponding event of the {@link CBehavior::owner owner}.
-	 * @param CEvent $event event parameter
-	 */
-	public function afterConstruct($event) {
+	public function init() {
 		if (is_null($this->uploadPath)) {
 			$this->_uploadPath = Yii::app()->getModule('crescendo')->uploadSourceDirectoryPath;
 		} else {
@@ -63,6 +58,7 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 	 * @param CEvent $event event parameter
 	 */
 	public function afterDelete() {
+		$this->init();
 		@unlink($this->getUploadSourceDirectoryPath($this->getOwner()->{$this->crescendoFileNameAttribute}));
 	}
 
@@ -72,10 +68,12 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 	 * @param CModelEvent $event event parameter
 	 */
 	public function afterSave($event) {
+		$this->init();
 		$this->getOwner()->{$this->crescendoFileFileProperty}->saveAs($this->getUploadSourceDirectoryPath($this->_fileName));
 	}
 
 	public function beforeValidate($event) {
+		$this->init();
 		$file = $this->getOwner()->{$this->crescendoFileFileProperty} = CUploadedFile::getInstance($this->getOwner(), $this->crescendoFileFileProperty);
 		if ($file instanceof CUploadedFile) {
 			if (!empty($file->tempName)) {

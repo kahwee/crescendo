@@ -46,12 +46,7 @@ class CrescendoFileOwnerBehavior extends CActiveRecordBehavior {
 	private $_fileModel;
 	private $_fileModelFileProperty;
 
-	/**
-	 * Responds to {@link CModel::onAfterConstruct} event.
-	 * Overrides this method if you want to handle the corresponding event of the {@link CBehavior::owner owner}.
-	 * @param CEvent $event event parameter
-	 */
-	public function afterConstruct($event) {
+	public function init() {
 		$fileModel = $this->crescendoFileModel;
 		$this->_fileModel = $fileModel::model();
 		if (isset($this->_fileModel->{$this->crescendoFileBehavior})) {
@@ -67,6 +62,7 @@ class CrescendoFileOwnerBehavior extends CActiveRecordBehavior {
 	 * @param CModelEvent $event event parameter
 	 */
 	public function afterSave($event) {
+		$this->init();
 		$ownerClass = get_class($this->getOwner());
 		$fileModel = new $this->_fileModel;
 		$fileModel->{$this->crescendoFileModelNameAttribute} = $ownerClass;
