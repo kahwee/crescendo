@@ -2,10 +2,24 @@
 
 class CrescendoModule extends CWebModule {
 
+	public $uploadSourceDirectoryPath;
+	public $uploadSourceUrlPath;
+	public $imageCacheDirectoryPath;
+	public $imageCacheUrlPath;
+
 	public function init() {
-		// this method is called when the module is being created
-		// you may place code here to customize the module or the application
-		// import the module-level models and components
+		if (empty($this->uploadSourceDirectoryPath)) {
+			$this->uploadSourceDirectoryPath = Yii::getPathOfAlias('webroot.uploads');
+		}
+		if (empty($this->uploadSourceUrlPath)) {
+			$this->uploadSourceUrlPath = '/uploads';
+		}
+		if (empty($this->imageCacheDirectoryPath)) {
+			$this->imageCacheDirectoryPath = Yii::getPathOfAlias('webroot.uploads');
+		}
+		if (empty($this->imageCacheUrlPath)) {
+			$this->imageCacheUrlPath = '/uploads';
+		}
 		$this->setImport(array(
 			'crescendo.models.*',
 			'crescendo.components.*',
