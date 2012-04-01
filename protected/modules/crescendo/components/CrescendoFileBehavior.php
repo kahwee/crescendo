@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CrescendoBehavior
+ * CrescendoFileBehavior
  *
  * @author KahWee Teng <t@kw.sg>
  * @version 1.0
@@ -9,27 +9,33 @@
  * @copyright Copyright &copy; 2011 KahWee Teng
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class CrescendoBehavior extends CActiveRecordBehavior {
+class CrescendoFileBehavior extends CActiveRecordBehavior {
 
-	public $fileProperty = 'file';
-	public $nameField = 'name';
-	public $mimeTypeField = 'mime_type';
+	/**
+	 * Name of file upload property that is in $this->owner.
+	 * This is for the File model.
+	 *
+	 * @var string
+	 */
+	public $crescendoFileFileProperty = 'file';
+	public $crescendoFileNameAttribute = 'name';
+	public $mimeTypeAttribute = 'mime_type';
 
 	/**
 	 * Yii path for uploads, using getPathOfAlias
-	 * @var string 
+	 * @var string
 	 */
 	public $uploadPath = null;
 
 	/**
 	 * Extension of the file.
-	 * @var string 
+	 * @var string
 	 */
 	private $_extension = '';
 
 	/**
 	 * Generated filename, including the extension.
-	 * @var string 
+	 * @var string
 	 */
 	private $_fileName = '';
 	private $_uploadPath = '';
@@ -39,7 +45,7 @@ class CrescendoBehavior extends CActiveRecordBehavior {
 	 * Overrides this method if you want to handle the corresponding event of the {@link CBehavior::owner owner}.
 	 * @param CEvent $event event parameter
 	 */
-	public function __construct() {
+	public function afterConstruct($event) {
 		if (is_null($this->uploadPath)) {
 			$this->_uploadPath = Yii::app()->getModule('crescendo')->uploadSourceDirectoryPath;
 		} else {
@@ -47,35 +53,45 @@ class CrescendoBehavior extends CActiveRecordBehavior {
 		}
 	}
 
-	public function getFilePath($fileName) {
+	public function getUploadSourceDirectoryPath($fileName) {
 		return $this->_uploadPath . DIRECTORY_SEPARATOR . $fileName;
 	}
 
+	/**
+	 * Responds to {@link CActiveRecord::onAfterDelete} event.
+	 * Overrides this method if you want to handle the corresponding event of the {@link CBehavior::owner owner}.
+	 * @param CEvent $event event parameter
+	 */
 	public function afterDelete() {
-		@unlink($this->getFilePath($this->getOwner()->{$this->nameField}));
+		@unlink($this->getUploadSourceDirectoryPath($this->getOwner()->{$this->crescendoFileNameAttribute}));
 	}
 
+	/**
+	 * Responds to {@link CActiveRecord::onAfterSave} event.
+	 * Overrides this method if you want to handle the corresponding event of the {@link CBehavior::owner owner}.
+	 * @param CModelEvent $event event parameter
+	 */
 	public function afterSave($event) {
-		$this->getOwner()->{$this->fileProperty}->saveAs($this->getFilePath($this->_fileName));
+		$this->getOwner()->{$this->crescendoFileFileProperty}->saveAs($this->getUploadSourceDirectoryPath($this->_fileName));
 	}
 
 	public function beforeValidate($event) {
-		$file = $this->getOwner()->{$this->fileProperty} = CUploadedFile::getInstance($this->getOwner(), $this->fileProperty);
+		$file = $this->getOwner()->{$this->crescendoFileFileProperty} = CUploadedFile::getInstance($this->getOwner(), $this->crescendoFileFileProperty);
 		if ($file instanceof CUploadedFile) {
 			if (!empty($file->tempName)) {
-				if (!empty($this->mimeTypeField)) {
-					$this->getOwner()->{$this->mimeTypeField} = @CFileHelper::getMimeType($file->tempName);
+				if (!empty($this->mimeTypeAttribute)) {
+					$this->getOwner()->{$this->mimeTypeAttribute} = @CFileHelper::getMimeType($file->tempName);
 				}
 				$this->_extension = @CFileHelper::getExtension($file->name);
 			}
 			$this->_fileName = $this->randomHash() . (empty($this->_extension) ? '' : ".{$this->_extension}");
-			$this->getOwner()->{$this->nameField} = $this->_fileName;
+			$this->getOwner()->{$this->crescendoFileNameAttribute} = $this->_fileName;
 		}
 	}
 
 	/**
 	 * Generate a somewhat unique and randomized hash for the filename.
-	 * 
+	 *
 	 * @return string Unique and random hash for filename generation.
 	 */
 	public function randomHash() {

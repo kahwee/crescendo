@@ -23,10 +23,10 @@ return array(
 		),
 		'crescendo' => array(
 			'class' => 'application.modules.crescendo.CrescendoModule',
-			# 'uploadSourceDirectoryPath' => '/var/www/static/uploads', #Behaviors upload to this directory
-			# 'uploadSourceUrlPath' => '/uploads',
-			# 'imageCacheDirectoryPath' => '/var/www/static/uploads', #CrescendoHelper caches thumbnails to this directory
-			# 'imageCacheUrlPath' => '/uploads',
+		# 'uploadSourceDirectoryPath' => '/var/www/static/uploads', #Behaviors upload to this directory
+		# 'uploadSourceUrlPath' => '/uploads',
+		# 'imageCacheDirectoryPath' => '/var/www/static/uploads', #CrescendoHelper caches thumbnails to this directory
+		# 'imageCacheUrlPath' => '/uploads',
 		),
 	),
 	'components' => array(

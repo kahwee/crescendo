@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This is the model class for table "upload".
+ * This is the model class for table "product".
  *
- * The followings are the available columns in table 'upload':
+ * The followings are the available columns in table 'product':
  * @property string $id
- * @property string $file_name
  */
-class Upload extends CActiveRecord {
+class Product extends CActiveRecord {
 
-	public $file;
+	public $image;
 
 	/**
 	 * Returns a list of behaviors that this model should behave as.
@@ -33,9 +32,10 @@ class Upload extends CActiveRecord {
 	 */
 	public function behaviors() {
 		return array(
-			'CrescendoFileBehavior' => array(
-				'class' => 'application.modules.crescendo.components.CrescendoFileBehavior',
-				'crescendoFileFileProperty' => 'file',
+			'CrescendoFileOwnerBehavior' => array(
+				'class' => 'application.modules.crescendo.components.CrescendoFileOwnerBehavior',
+				'crescendoFileModel' => 'Upload',
+				'crescendoFileOwnerFileProperty' => 'image',
 			),
 		);
 	}
@@ -43,7 +43,7 @@ class Upload extends CActiveRecord {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Upload the static model class
+	 * @return Product the static model class
 	 */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
@@ -53,20 +53,18 @@ class Upload extends CActiveRecord {
 	 * @return string the associated database table name
 	 */
 	public function tableName() {
-		return 'upload';
+		return 'product';
 	}
 
 	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules() {
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
 		return array(
-			array('model_id, model_name', 'safe'),
-			array('name', 'length', 'max' => 255),
-			array('file', 'file', 'types' => 'jpg,gif,png', 'maxSize' => 3 * 1024 * 1024 /* 3 MB */,),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, name', 'safe', 'on' => 'search'),
+			array('id', 'safe', 'on' => 'search'),
+			array('image', 'safe'),
 		);
 	}
 
@@ -86,7 +84,6 @@ class Upload extends CActiveRecord {
 	public function attributeLabels() {
 		return array(
 			'id' => 'ID',
-			'name' => 'File Name',
 		);
 	}
 
@@ -101,7 +98,6 @@ class Upload extends CActiveRecord {
 		$criteria = new CDbCriteria;
 
 		$criteria->compare('id', $this->id, true);
-		$criteria->compare('name', $this->name, true);
 
 		return new CActiveDataProvider($this, array(
 				'criteria' => $criteria,

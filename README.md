@@ -1,4 +1,4 @@
-Highly extensible uploader module for Yii, serves with icing 𝆒
+Highly extensible uploader for Yii, serves with icing 𝆒
 ========================================
 
 What is Crescendo?
@@ -6,7 +6,8 @@ What is Crescendo?
 
 Crescendo is a set of tools to let developers implement uploading. It includes the following:
 
- * CrescendoBehavior: A behavior that handles uploads with little configuration.
+ * CrescendoFileBehavior: A behavior that handles uploads.
+ * CrescendoFileOwnerBehavior: A behavior that handles relations of uploads.
  * CrescendoHelper: A helper that returns the HTML image element after doing resizing on the fly using the wonderous phpthumb class.
 
 How to make it work
