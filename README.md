@@ -1,4 +1,4 @@
-𝆒 Highly extensible uploader module for Yii, serves with icing.
+Highly extensible uploader module for Yii, serves with icing 𝆒
 ========================================
 
 What is Crescendo?
