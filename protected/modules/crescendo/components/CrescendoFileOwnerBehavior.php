@@ -64,6 +64,7 @@ class CrescendoFileOwnerBehavior extends CActiveRecordBehavior {
 	public function afterSave($event) {
 		$this->init();
 		$ownerClass = get_class($this->getOwner());
+		if (!isset($_FILES[$ownerClass])) return true;
 		$fileModel = new $this->_fileModel;
 		$fileModel->{$this->crescendoFileModelNameAttribute} = $ownerClass;
 		$fileModel->{$this->crescendoFileModelIdAttribute} = $this->getOwner()->primaryKey;
