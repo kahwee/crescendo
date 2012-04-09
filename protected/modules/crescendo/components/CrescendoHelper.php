@@ -31,7 +31,7 @@ class CrescendoHelper extends KThumbnail {
 
 /**
  * KThumbnail is a static class that provides image resizing facility through phpthumb.
- * 
+ *
  * Static binds late.
  *
  * @author KahWee Teng <t@kw.sg>
@@ -41,6 +41,10 @@ class CrescendoHelper extends KThumbnail {
  * @license http://www.opensource.org/licenses/mit-license.php
  */
 class KThumbnail {
+
+	public static function getImageNotAvailableUrlPath() {
+		return 'http://upload.wikimedia.org/wikipedia/en/d/d1/Image_not_available.png';
+	}
 
 	public static function getImageCacheDirectoryPath() {
 		return Yii::getPathOfAlias('webroot.uploads');
@@ -90,7 +94,6 @@ class KThumbnail {
 		if (strpos($src, 'http://') === 0 || strpos($src, 'https://') === 0) {
 			return CHtml::image($src, $alt, $options);
 		}
-		include_once(static::getPhpThumbPath());
 		#get image from source
 		if (isset($options['imageSourceDirectoryPath'])) {
 			$imageSourceDirectoryPath = $options['imageSourceDirectoryPath'];
@@ -98,13 +101,17 @@ class KThumbnail {
 			$imageSourceDirectoryPath = static::getImageSourceDirectoryPath();
 		}
 		$imageSourceFilePath = $imageSourceDirectoryPath . DIRECTORY_SEPARATOR . $src;
+		if (empty($imageSourceFilePath) || !file_exists($imageSourceFilePath)) {
+			return CHtml::image(static::getImageNotAvailableUrlPath(), $alt, $options);
+		}
+		include_once(static::getPhpThumbPath());
 		#caching the resize appropriately
 		$thumb = PhpThumbFactory::create($imageSourceFilePath);
 		#the various resize
 		if (!empty($height) && !empty($width)) {
 			$thumb->adaptiveResize($width, $height);
 		} else {
-			$thumb->resize($width, $height);
+			$thumb->resize($width, 0);
 		}
 		#caching the resize appropriately
 		if (isset($options['imageCacheDirectoryPath'])) {
