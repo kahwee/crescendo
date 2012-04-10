@@ -98,6 +98,9 @@ class KThumbnail {
 		if (!empty($width)) {
 			$options['width'] = $width;
 		}
+		if (empty($src)) {
+			return CHtml::image(static::getImageNotAvailableUrlPath(), $alt, $options);
+		}
 		#if it is url, ignore.
 		if (strpos($src, 'http://') === 0 || strpos($src, 'https://') === 0) {
 			return CHtml::image($src, $alt, $options);
