@@ -6,6 +6,7 @@ class CrescendoModule extends CWebModule {
 	public $uploadSourceUrlPath;
 	public $imageCacheDirectoryPath;
 	public $imageCacheUrlPath;
+	public $imageNotAvailableUrlPath;
 
 	public function init() {
 		if (empty($this->uploadSourceDirectoryPath)) {
@@ -19,6 +20,10 @@ class CrescendoModule extends CWebModule {
 		}
 		if (empty($this->imageCacheUrlPath)) {
 			$this->imageCacheUrlPath = '/uploads/cache';
+		}
+		if (empty($this->imageNotAvailableUrlPath)) {
+			$asset_url = Yii::app()->assetManager->publish(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets', false, -1, true);
+			$this->imageNotAvailableUrlPath = $asset_url . '/no-image.png';
 		}
 		$this->setImport(array(
 			'crescendo.models.*',

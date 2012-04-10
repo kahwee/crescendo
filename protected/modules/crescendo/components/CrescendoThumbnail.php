@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CrescendoHelper
+ * CrescendoThumbnail
  *
  * @author KahWee Teng <t@kw.sg>
  * @version 1.3
@@ -10,6 +10,10 @@
  * @license http://www.opensource.org/licenses/mit-license.php
  */
 class CrescendoThumbnail extends KThumbnail {
+
+	public static function getImageNotAvailableUrlPath() {
+		return Yii::app()->getModule('crescendo')->imageNotAvailableUrlPath;
+	}
 
 	public static function getImageCacheDirectoryPath() {
 		$imageCacheDirectoryPath = Yii::app()->getModule('crescendo')->imageCacheDirectoryPath;

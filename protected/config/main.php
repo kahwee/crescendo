@@ -27,6 +27,7 @@ return array(
 		# 'uploadSourceUrlPath' => '/uploads',
 		# 'imageCacheDirectoryPath' => '/var/www/static/uploads/cache', #CrescendoThumbnail caches thumbnails to this directory
 		# 'imageCacheUrlPath' => '/uploads/cache',
+		# 'imageNotAvailableUrlPath' => '/img/hello.png', #defaults to using Crescendo assets for no-image.png
 		),
 	),
 	'components' => array(
