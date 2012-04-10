@@ -15,10 +15,10 @@ class CrescendoModule extends CWebModule {
 			$this->uploadSourceUrlPath = '/uploads';
 		}
 		if (empty($this->imageCacheDirectoryPath)) {
-			$this->imageCacheDirectoryPath = Yii::getPathOfAlias('webroot.uploads');
+			$this->imageCacheDirectoryPath = Yii::getPathOfAlias('webroot.uploads.cache');
 		}
 		if (empty($this->imageCacheUrlPath)) {
-			$this->imageCacheUrlPath = '/uploads';
+			$this->imageCacheUrlPath = '/uploads/cache';
 		}
 		$this->setImport(array(
 			'crescendo.models.*',

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * CrescendoHelper
  *
@@ -9,10 +8,14 @@
  * @copyright Copyright &copy; 2011 KahWee Teng
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class CrescendoHelper extends KThumbnail {
+class CrescendoThumbnail extends KThumbnail {
 
 	public static function getImageCacheDirectoryPath() {
-		return Yii::app()->getModule('crescendo')->imageCacheDirectoryPath;
+		$imageCacheDirectoryPath = Yii::app()->getModule('crescendo')->imageCacheDirectoryPath;
+		if (!is_dir($imageCacheDirectoryPath)) {
+			mkdir($imageCacheDirectoryPath, 0777);
+		}
+		return $imageCacheDirectoryPath;
 	}
 
 	public static function getImageCacheUrlPath() {
@@ -20,6 +23,10 @@ class CrescendoHelper extends KThumbnail {
 	}
 
 	public static function getImageSourceDirectoryPath() {
+		$imageSourceDirectoryPath = Yii::app()->getModule('crescendo')->uploadSourceDirectoryPath;
+		if (!is_dir($imageSourceDirectoryPath)) {
+			mkdir($imageSourceDirectoryPath, 0777);
+		}
 		return Yii::app()->getModule('crescendo')->uploadSourceDirectoryPath;
 	}
 
@@ -104,27 +111,35 @@ class KThumbnail {
 		if (empty($imageSourceFilePath) || !file_exists($imageSourceFilePath)) {
 			return CHtml::image(static::getImageNotAvailableUrlPath(), $alt, $options);
 		}
-		include_once(static::getPhpThumbPath());
-		#caching the resize appropriately
-		$thumb = PhpThumbFactory::create($imageSourceFilePath);
-		#the various resize
-		if (!empty($height) && !empty($width)) {
-			$thumb->adaptiveResize($width, $height);
-		} else {
-			$thumb->resize($width, 0);
-		}
 		#caching the resize appropriately
 		if (isset($options['imageCacheDirectoryPath'])) {
 			$imageCacheDirectoryPath = $options['imageCacheDirectoryPath'];
 		} else {
 			$imageCacheDirectoryPath = static::getImageCacheDirectoryPath();
 		}
+		#create directory if not exist
 		$imageCacheDirectoryPath .= DIRECTORY_SEPARATOR . $width . 'x' . $height;
 		if (!is_dir($imageCacheDirectoryPath)) {
 			mkdir($imageCacheDirectoryPath, 0777);
 		}
-		$imageCacheFilePath = $imageCacheDirectoryPath . DIRECTORY_SEPARATOR . $src;
+		$parts = explode(DIRECTORY_SEPARATOR, $src);
+		for ($i = 0; $i < count($parts) - 1; $i++) {
+			$imageCacheDirectoryPath .= DIRECTORY_SEPARATOR . $parts[$i];
+			if (!is_dir($imageCacheDirectoryPath)) {
+				mkdir($imageCacheDirectoryPath, 0777);
+			}
+		}
+		$imageCacheFilePath =  $imageCacheDirectoryPath . DIRECTORY_SEPARATOR . $parts[count($parts) - 1];
 		if (!file_exists($imageCacheFilePath)) {
+			include_once(static::getPhpThumbPath());
+			#caching the resize appropriately
+			$thumb = PhpThumbFactory::create($imageSourceFilePath);
+			#the various resize
+			if (!empty($height) && !empty($width)) {
+				$thumb->adaptiveResize($width, $height);
+			} else {
+				$thumb->resize($width, 0);
+			}
 			$thumb->save($imageCacheFilePath);
 		}
 		$imageCacheUrl = static::getImageCacheUrlPath() . '/' . $width . 'x' . $height . '/' . $src;

@@ -49,7 +49,18 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 	}
 
 	public function getUploadSourceDirectoryPath($fileName) {
-		return $this->_uploadPath . DIRECTORY_SEPARATOR . $fileName;
+		$parts = explode(DIRECTORY_SEPARATOR, $fileName);
+		$uploadSourceDirectory = $this->_uploadPath;
+		if (!is_dir($uploadSourceDirectory)) {
+			mkdir($uploadSourceDirectory, 0777);
+		}
+		for ($i = 0; $i < count($parts) - 1; $i++) {
+			$uploadSourceDirectory .= DIRECTORY_SEPARATOR . $parts[$i];
+			if (!is_dir($uploadSourceDirectory)) {
+				mkdir($uploadSourceDirectory, 0777);
+			}
+		}
+		return $uploadSourceDirectory . DIRECTORY_SEPARATOR . $parts[count($parts) - 1];
 	}
 
 	/**
@@ -69,6 +80,7 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 	 */
 	public function afterSave($event) {
 		$this->init();
+		$owner = $this->getOwner()->findByPk($this->getOwner()->id);
 		$this->getOwner()->{$this->crescendoFileFileProperty}->saveAs($this->getUploadSourceDirectoryPath($this->_fileName));
 	}
 
@@ -82,7 +94,8 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 				}
 				$this->_extension = @CFileHelper::getExtension($file->name);
 			}
-			$this->_fileName = $this->randomHash() . (empty($this->_extension) ? '' : ".{$this->_extension}");
+			$createdAtDateTime = new DateTime('now');
+			$this->_fileName = $createdAtDateTime->format('Y-m') . DIRECTORY_SEPARATOR . $this->randomHash() . (empty($this->_extension) ? '' : ".{$this->_extension}");
 			$this->getOwner()->{$this->crescendoFileNameAttribute} = $this->_fileName;
 		}
 	}

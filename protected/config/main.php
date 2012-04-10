@@ -25,8 +25,8 @@ return array(
 			'class' => 'application.modules.crescendo.CrescendoModule',
 		# 'uploadSourceDirectoryPath' => '/var/www/static/uploads', #Behaviors upload to this directory
 		# 'uploadSourceUrlPath' => '/uploads',
-		# 'imageCacheDirectoryPath' => '/var/www/static/uploads', #CrescendoHelper caches thumbnails to this directory
-		# 'imageCacheUrlPath' => '/uploads',
+		# 'imageCacheDirectoryPath' => '/var/www/static/uploads/cache', #CrescendoThumbnail caches thumbnails to this directory
+		# 'imageCacheUrlPath' => '/uploads/cache',
 		),
 	),
 	'components' => array(

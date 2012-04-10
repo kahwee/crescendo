@@ -16,10 +16,17 @@ $this->menu=array(
 <h1>View Upload #<?php echo $model->id; ?></h1>
 
 <?php
-Yii::import('application.modules.crescendo.components.CrescendoHelper');
+Yii::import('application.modules.crescendo.components.CrescendoImage');
 
-echo CrescendoHelper::image($model->name, 100, 270);
-echo CrescendoHelper::image('http://l.yimg.com/a/i/ww/met/unsupprtd_brwsr/yahoo_logo_sg_083109.gif', 100);
+$this->widget('CrescendoImage', array(
+	'name' => $model->name,
+	'width' => 100,
+	'height' => 270,
+));
+$this->widget('CrescendoImage', array(
+	'name' => 'http://l.yimg.com/a/i/ww/met/unsupprtd_brwsr/yahoo_logo_sg_083109.gif',
+	'width' => 100,
+));
 
 $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
