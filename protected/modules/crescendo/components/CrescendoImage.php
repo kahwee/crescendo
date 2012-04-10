@@ -1,5 +1,7 @@
 <?php
+
 Yii::import('system.web.widgets');
+
 /**
  * CrescendoHelper
  *
@@ -10,9 +12,11 @@ Yii::import('system.web.widgets');
  * @license http://www.opensource.org/licenses/mit-license.php
  */
 class CrescendoImage extends CWidget {
+
 	public $name;
 	public $width;
 	public $height;
+
 	/**
 	 * @var array additional HTML attributes that will be rendered in the image tag.
 	 */
@@ -27,5 +31,6 @@ class CrescendoImage extends CWidget {
 		require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'CrescendoThumbnail.php');
 		echo CrescendoThumbnail::image($this->name, $this->width, $this->height, $this->options);
 	}
+
 }
 

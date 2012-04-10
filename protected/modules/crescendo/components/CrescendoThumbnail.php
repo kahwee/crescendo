@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CrescendoHelper
  *
@@ -54,11 +55,11 @@ class KThumbnail {
 	}
 
 	public static function getImageCacheDirectoryPath() {
-		return Yii::getPathOfAlias('webroot.uploads');
+		return Yii::getPathOfAlias('webroot.uploads.cache');
 	}
 
 	public static function getImageCacheUrlPath() {
-		return '/uploads';
+		return '/uploads/cache';
 	}
 
 	public static function getImageSourceDirectoryPath() {
@@ -87,7 +88,7 @@ class KThumbnail {
 	 * @param array $options Remaining options are passed to $htmlOptions for CHtml::image
 	 * @return string the generated image tag
 	 */
-	public static function image($src, $width=null, $height=null, $alt='', $options=array()) {
+	public static function image($src, $width = null, $height = null, $alt = '', $options = array()) {
 		#normalizing nulls and zeroes
 		$height = (int) $height;
 		$width = (int) $width;
@@ -129,7 +130,7 @@ class KThumbnail {
 				mkdir($imageCacheDirectoryPath, 0777);
 			}
 		}
-		$imageCacheFilePath =  $imageCacheDirectoryPath . DIRECTORY_SEPARATOR . $parts[count($parts) - 1];
+		$imageCacheFilePath = $imageCacheDirectoryPath . DIRECTORY_SEPARATOR . $parts[count($parts) - 1];
 		if (!file_exists($imageCacheFilePath)) {
 			include_once(static::getPhpThumbPath());
 			#caching the resize appropriately
