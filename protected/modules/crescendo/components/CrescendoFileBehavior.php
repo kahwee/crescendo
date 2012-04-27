@@ -52,12 +52,16 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 		$parts = explode(DIRECTORY_SEPARATOR, $fileName);
 		$uploadSourceDirectory = $this->_uploadPath;
 		if (!is_dir($uploadSourceDirectory)) {
-			mkdir($uploadSourceDirectory, 0777);
+			if (!@mkdir($uploadSourceDirectory, 0777)) {
+				throw new CException("Cannot create directory: '$uploadSourceDirectory'. Check if you have assigned write permissions parent directory.");
+			}
 		}
 		for ($i = 0; $i < count($parts) - 1; $i++) {
 			$uploadSourceDirectory .= DIRECTORY_SEPARATOR . $parts[$i];
 			if (!is_dir($uploadSourceDirectory)) {
-				mkdir($uploadSourceDirectory, 0777);
+				if (!@mkdir($uploadSourceDirectory, 0777)) {
+					throw new CException("Cannot create directory: '$uploadSourceDirectory'. Check if you have assigned write permissions parent directory.");
+				}
 			}
 		}
 		return $uploadSourceDirectory . DIRECTORY_SEPARATOR . $parts[count($parts) - 1];
