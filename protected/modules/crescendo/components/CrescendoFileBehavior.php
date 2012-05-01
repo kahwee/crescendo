@@ -68,7 +68,7 @@ class CrescendoFileBehavior extends CActiveRecordBehavior {
 	 * Overrides this method if you want to handle the corresponding event of the {@link CBehavior::owner owner}.
 	 * @param CEvent $event event parameter
 	 */
-	public function afterDelete() {
+	public function afterDelete($event) {
 		$this->init();
 		@unlink($this->getUploadSourceDirectoryPath($this->getOwner()->{$this->crescendoFileNameAttribute}));
 	}
