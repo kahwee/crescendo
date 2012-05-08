@@ -20,8 +20,8 @@ And in your `./protected/config/main.php`, add `crescendo` to begin:
 ```php
 <?php
 return array(
-  'modules' => array(
-  	'crescendo' => array(),
+	'modules' => array(
+		'crescendo' => array(),
 	),
 );
 ```
@@ -34,7 +34,7 @@ For more advance usage, here is an example.
 ```php
 <?php
 return array(
-  'modules' => array(
+	'modules' => array(
 		'crescendo' => array(
 			'class' => 'application.modules.crescendo.CrescendoModule',
 			'uploadSourceDirectoryPath' => '/var/www/static/uploads', #Behaviors upload to this directory
